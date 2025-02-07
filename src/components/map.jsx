@@ -32,6 +32,14 @@ const DefaultMap = () => {
         }
       ).addTo(map);
 
+      const markerIcon = new L.icon({
+        iconUrl: "/images/logo-ugm.png",
+        iconSize: [45, 45],
+      });
+
+      L.marker([-7.770067301994683, 110.37804717111858], { icon: markerIcon })
+        .addTo(map);
+
       // Initialize FeatureGroup for drawn items
       const drawnItems = new L.FeatureGroup();
       map.addLayer(drawnItems);
@@ -46,9 +54,10 @@ const DefaultMap = () => {
           circlemarker: true,
           marker: true,
           polyline: true,
+          allowIntersection: false,
         },
         edit: {
-          featureGroup: drawnItems, // Enable editing/deleting of drawn items
+          featureGroup: drawnItems,   
         },
       });
 

@@ -15,8 +15,6 @@
     "leaflet-draw": "^1.0.4",
     "react": "^19.0.0-rc.1",
     "react-dom": "^19.0.0-rc.1",
-    "react-leaflet": "^5.0.0-rc.2",
-    "react-leaflet-draw": "^0.20.6",
     "tailwindcss": "^4.0.4"
   },
   "devDependencies": {
