@@ -1,21 +1,38 @@
 import React from "react";
-import { useState, useEffect, useRef } from 'react';
 
 const Navbar = () => {
-    return(
-        <div className="w-screen flex justify-between h-[6.5vw] bg-[#ffffff] border-b-black border-b-[0.15vw]">
-            <div className="h-full font-poppins font-bold text-[#005F73] flex justify-start items-center">
-                <img className="w-[25vw]" src="/images/logo-gamaforce.png" alt="logo-gamaforce" />
+    return (
+        <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-md border-b-[0.15vw] border-b-black">
+            <div className="w-screen flex justify-between h-[6.5vw] items-center px-[4vw]">
+                {/* Logo */}
+                <div className="h-full font-poppins font-bold text-[#005F73] flex items-center">
+                    <img className="w-[25vw]" src="/images/logo-gamaforce.png" alt="logo-gamaforce" />
+                </div>
+                
+                {/* Menu Items */}
+                <ul className="font-montserrat font-medium flex items-center cursor-pointer gap-x-[3vw]">
+                    <li>
+                        <a href="https://gamaforce.wg.ugm.ac.id/">Home</a>
+                    </li>
+                    <li>
+                        <a href="https://gamaforce.wg.ugm.ac.id/about-us/">Profile</a></li>
+                    <li>
+                        <a href="https://gamaforce.wg.ugm.ac.id/subteam/">Subteam</a>
+                    </li>
+                    <li>
+                       <a href="https://gamaforce.wg.ugm.ac.id/achievements/">
+                       Achievements
+                       </a> 
+                    </li>
+                    <li>
+                       <a href="https://gamaforce.wg.ugm.ac.id/contact-us-2023/">
+                       Contact Us
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <ul className="h-full font-montserrat font-medium flex justify-end items-center cursor-pointer gap-x-[3vw] mr-[4vw]">
-                <li>Home</li>
-                <li>Profile</li>
-                <li>Subteam</li>
-                <li>Achievements</li>
-                <li>Contact Us</li>
-            </ul>
         </div>
-    )
-}
+    );
+};
 
 export default Navbar;
