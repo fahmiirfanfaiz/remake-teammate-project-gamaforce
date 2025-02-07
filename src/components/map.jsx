@@ -8,9 +8,20 @@ const DefaultMap = () => {
   const mapRef = useRef(null); // Reference for the map container
 
   useEffect(() => {
-    // Ensure the map is only initialized once
     if (mapRef.current && !mapRef.current._leaflet_id) {
-      const map = L.map(mapRef.current).setView([-7.769961708941515, 110.37822795057816], 18);
+      const map = L.map(mapRef.current, { zoomControl: false }).setView(
+        [-7.769961708941515, 110.37822795057816],
+        18
+      );
+
+      L.control.zoom({ position: "topright" }).addTo(map);
+
+      setTimeout(() => {
+        const zoomControl = document.querySelector(".leaflet-control-zoom");
+        if (zoomControl) {
+          zoomControl.classList.add("absolute", "top-[230px]", "right-0.8"); // Move it down
+        }
+      }, 100); // Delay to ensure Leaflet has rendered
 
       // Add Tile Layer (Satellite View)
       L.tileLayer(
@@ -59,15 +70,6 @@ const DefaultMap = () => {
       map.on(L.Draw.Event.DELETED, function (e) {
         console.log("Deleted Shapes:", e.layers.toGeoJSON());
       });
-
-      // Add Custom Marker
-      const customIcon = L.icon({
-        iconUrl: "/images/logo-ugm.png",
-        iconSize: [50, 50],
-        iconAnchor: [25, 50],
-      });
-
-      L.marker([-7.770717, 110.37779], { icon: customIcon }).addTo(map);
     }
   }, []); // Run once after the component mounts
 
