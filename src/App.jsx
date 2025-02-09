@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Navbar from './components/navbar'
 import DefaultMap from './components/map'
 import Button from './components/button'
+// import Popup from './components/popup'
 import './App.css'
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
       <Navbar/>
       <DefaultMap/>
       <Button/>
+      {/* <Popup/> */}
     </div>
   )
 }
