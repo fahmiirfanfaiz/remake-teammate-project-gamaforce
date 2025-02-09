@@ -86,7 +86,7 @@ const DefaultMap = () => {
     <div className="relative">
       <div
         ref={mapRef}
-        className="absolute top-[6.5vw] left-0 w-screen h-[calc(100vh-6.5vw)] z-0"
+        className="absolute top-[6.5vw] left-0 w-screen h-[calc(100vh-6.5vw)] z-10"
       ></div>
     </div>
   );
