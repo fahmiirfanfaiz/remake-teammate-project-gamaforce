@@ -3,44 +3,40 @@ import React, { useState } from "react";
 const Button = ({ onSaveMission }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [missionName, setMissionName] = useState("");
-  const [isSaving, setIsSaving] = useState(false); // Animasi tombol saat menyimpan
-  const [message, setMessage] = useState(""); // Pesan sukses
 
-  // Saat tombol "Simpan" ditekan
-  const handleSave = async () => {
+  console.log("🛠 onSaveMission di Button:", onSaveMission); // Debugging
+
+  const handleSave = () => {
     if (!missionName) {
       alert("⚠️ Masukkan nama misi terlebih dahulu!");
       return;
     }
 
-    setIsSaving(true); // Ubah tombol menjadi "Menyimpan..."
-    await onSaveMission(missionName); // Simpan misi ke backend
-    setIsSaving(false);
-    setMessage("✅ Misi berhasil dibuat!"); // Tampilkan pesan sukses
+    console.log("🛠 Memanggil onSaveMission() dengan nama misi:", missionName);
 
-    // Reset input setelah disimpan
-    setTimeout(() => {
-      setMessage("");
-      setMissionName("");
-      setShowPopup(false);
-    }, 2000); // Pesan sukses akan hilang setelah 2 detik
+    if (typeof onSaveMission === "function") {
+      onSaveMission(missionName); // Pastikan hanya memanggil jika ada
+    } else {
+      console.error("❌ ERROR: onSaveMission bukan fungsi!", onSaveMission);
+    }
+
+    setShowPopup(false);
+    setMissionName(""); // Reset input setelah disimpan
   };
 
   return (
-    <div className="flex flex-col z-10">
-      {/* Tombol "Plan Mission" */}
+    <div className="relative z-20">
+      {/* ✅ Tombol Plan Mission */}
       <button
-        className="absolute bg-white font-montserrat font-bold bottom-0 left-1/2 -translate-x-1/2 
-                   w-[13vw] h-[4vw] mb-[3vw] text-center border-black border-2 rounded-[2vw] 
-                   cursor-pointer hover:bg-gray-200 transition duration-200"
+        className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-white text-black font-bold px-6 py-3 rounded-full border-2 border-black shadow-md cursor-pointer hover:bg-gray-200 transition duration-300"
         onClick={() => setShowPopup(!showPopup)}
       >
         Plan Mission
       </button>
 
-      {/* Popup Input Nama Misi */}
+      {/* Popup untuk input nama misi */}
       {showPopup && (
-        <div className="absolute bottom-[8vw] left-1/2 -translate-x-1/2 bg-white p-4 border rounded shadow flex flex-col gap-2">
+        <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-white p-4 border rounded shadow-lg flex flex-col gap-2">
           <input
             type="text"
             placeholder="Nama Misi"
@@ -48,22 +44,12 @@ const Button = ({ onSaveMission }) => {
             value={missionName}
             onChange={(e) => setMissionName(e.target.value)}
           />
-
           <button
             onClick={handleSave}
-            disabled={isSaving}
-            className={`px-4 py-2 rounded text-white transition duration-300 
-                        ${
-                          isSaving
-                            ? "bg-gray-500 cursor-not-allowed"
-                            : "bg-blue-500 hover:bg-blue-600 cursor-pointer active:bg-blue-700"
-                        }`}
+            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white px-4 py-2 rounded transition duration-300"
           >
-            {isSaving ? "Menyimpan..." : "Simpan Misi"}
+            Simpan Misi
           </button>
-
-          {/* Pesan Sukses */}
-          {message && <p className="text-green-600 font-bold mt-2">{message}</p>}
         </div>
       )}
     </div>
