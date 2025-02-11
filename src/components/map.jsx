@@ -1,11 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css";
+import Button from "./button"; // Pastikan button di-import
 
 const DefaultMap = () => {
-  const mapRef = useRef(null); // Reference for the map container
+  const mapRef = useRef(null);
+  const [waypoints, setWaypoints] = useState([]); 
 
   useEffect(() => {
     if (mapRef.current && !mapRef.current._leaflet_id) {
@@ -63,31 +65,59 @@ const DefaultMap = () => {
 
       map.addControl(drawControl);
 
-      // Handle Creation of New Shapes
+      // Event ketika user menggambar rute baru
       map.on(L.Draw.Event.CREATED, function (e) {
         const layer = e.layer;
         drawnItems.addLayer(layer);
-        console.log("Created Shape:", layer.toGeoJSON());
-      });
 
-      // Handle Editing of Shapes
-      map.on(L.Draw.Event.EDITED, function (e) {
-        console.log("Edited Shapes:", e.layers.toGeoJSON());
-      });
+        // Ambil koordinat dari layer yang dibuat
+        const geoJsonData = layer.toGeoJSON();
+        const coordinates = geoJsonData.geometry.coordinates;
 
-      // Handle Deletion of Shapes
-      map.on(L.Draw.Event.DELETED, function (e) {
-        console.log("Deleted Shapes:", e.layers.toGeoJSON());
+        console.log("📍 Koordinat rute:", coordinates);
+        setWaypoints(coordinates); // Simpan koordinat ke state
       });
     }
-  }, []); // Run once after the component mounts
+  }, []);
+
+  // Fungsi untuk menyimpan misi ke backend
+  const saveMission = async (missionName) => {
+    if (!missionName || waypoints.length === 0) {
+      alert("⚠️ Masukkan nama misi dan buat rute di peta terlebih dahulu!");
+      return;
+    }
+
+    const missionData = {
+      name: missionName,
+      waypoints: waypoints,
+    };
+
+    try {
+      const response = await fetch("http://localhost:5001/missions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(missionData),
+      });
+
+      if (!response.ok) throw new Error("❌ Gagal menyimpan misi!");
+
+      const data = await response.json();
+      console.log("✅ Mission saved:", data);
+      alert("🎯 Misi berhasil disimpan!");
+
+      setWaypoints([]); // Reset waypoints setelah disimpan
+    } catch (error) {
+      console.error("❌ Error saving mission:", error);
+      alert("⚠️ Terjadi kesalahan saat menyimpan misi");
+    }
+  };
 
   return (
     <div className="relative">
-      <div
-        ref={mapRef}
-        className="absolute top-[6.5vw] left-0 w-screen h-[calc(100vh-6.5vw)] z-10"
-      ></div>
+      <div ref={mapRef} className="absolute top-[6.5vw] left-0 w-screen h-[calc(100vh-6.5vw)] z-10"></div>
+
+      {/* Kirim fungsi saveMission sebagai props ke Button */}
+      <Button onSaveMission={saveMission} />
     </div>
   );
 };

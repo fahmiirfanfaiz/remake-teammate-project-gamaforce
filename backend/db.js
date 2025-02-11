@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
 
-// Buat koneksi ke SQLite
+// Inisialisasi database
 const db = new Database('./database.sqlite');
 
 // Buat tabel jika belum ada
@@ -15,4 +15,4 @@ db.exec(`
 
 console.log("✅ SQLite database ready.");
 
-export default db; // Pakai `export default`, bukan named export
+export default db; // HARUS pakai export default

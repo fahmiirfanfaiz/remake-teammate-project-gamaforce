@@ -11,16 +11,40 @@ app.use(bodyParser.json());
 
 // Get all missions
 app.get('/missions', (req, res) => {
-  const missions = db.prepare('SELECT * FROM missions').all();
-  res.json(missions);
+  try {
+    const stmt = db.prepare('SELECT * FROM missions'); // Gunakan prepare()
+    const missions = stmt.all(); // Gunakan all() untuk mengambil semua data
+
+    console.log("📤 Mengirim data ke frontend:", missions);
+    res.json(missions);
+  } catch (error) {
+    console.error("❌ Error mengambil data dari database:", error);
+    res.status(500).json({ error: error.message });
+  }
 });
+
+
 
 // Create a new mission
 app.post('/missions', (req, res) => {
   const { name, waypoints } = req.body;
-  db.prepare('INSERT INTO missions (name, waypoints) VALUES (?, ?)').run(name, JSON.stringify(waypoints));
-  res.json({ message: 'Mission created successfully' });
+
+  console.log("📥 Data diterima dari frontend:", { name, waypoints });
+
+  try {
+    const stmt = db.prepare('INSERT INTO missions (name, waypoints) VALUES (?, ?)');
+    stmt.run(name, JSON.stringify(waypoints)); // Perbaikan: gunakan prepare().run()
+
+    console.log("✅ Data berhasil disimpan ke database");
+    res.json({ message: 'Mission created successfully' });
+  } catch (error) {
+    console.error("❌ Error menyimpan ke database:", error);
+    res.status(500).json({ error: error.message });
+  }
 });
+
+
+
 
 // Jalankan server
 app.listen(PORT, () => {
