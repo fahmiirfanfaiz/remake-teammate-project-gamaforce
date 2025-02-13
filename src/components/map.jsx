@@ -8,6 +8,7 @@ import Button from "./button";
 const DefaultMap = () => {
   const mapRef = useRef(null);
   const [waypoints, setWaypoints] = useState([]); // Simpan koordinat
+  const drawnLayerRef = useRef(null); // Ref untuk layer yang menggambar misi
 
   useEffect(() => {
     const centerUgm = [-7.770204, 110.377873];
@@ -104,6 +105,28 @@ const DefaultMap = () => {
       console.error("❌ Error saving mission:", error);
       alert("⚠️ Terjadi kesalahan saat menyimpan misi");
     }
+  };
+
+  // ✅ Fungsi untuk memuat misi ke peta
+  const loadMission = (waypoints) => {
+    if (!mapRef.current) return;
+
+    // 🔥 Konversi koordinat agar cocok dengan Leaflet (lat, lng → lng, lat)
+    const convertedWaypoints = waypoints.map(([lat, lng]) => [lng, lat]);
+
+    // Hapus layer sebelumnya jika ada
+    if (drawnLayerRef.current) {
+      mapRef.current.removeLayer(drawnLayerRef.current);
+    }
+
+    // Buat polyline baru dengan koordinat misi yang diklik
+    const polyline = L.polyline(convertedWaypoints, { color: "red", weight: 4 }).addTo(mapRef.current);
+    drawnLayerRef.current = polyline;
+
+    // Zoom ke rute misi
+    mapRef.current.fitBounds(polyline.getBounds());
+
+    console.log("✅ Misi dimuat di peta:", convertedWaypoints);
   };
 
   console.log("🛠 Mengirim saveMission ke Button:", saveMission); // Debugging

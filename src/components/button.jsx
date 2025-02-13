@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaPlane, FaTrash, FaEdit } from "react-icons/fa"; // Import ikon pesawat, hapus, edit
 
-const Button = ({ onSaveMission }) => {
+const Button = ({ onSaveMission, loadMission }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [missionName, setMissionName] = useState("");
   const [showMissions, setShowMissions] = useState(false); // Tampilkan daftar misi
@@ -46,11 +46,18 @@ const Button = ({ onSaveMission }) => {
     }
   }, [showMissions]);
 
+  // ✅ Fungsi untuk memuat misi yang dipilih ke peta
+  const handleLoadMission = (mission) => {
+    if (loadMission) {
+      loadMission(mission.waypoints); // Panggil fungsi loadMission dari DefaultMap.jsx
+    }
+  };
+
   return (
-    <div className="relative z-20">
+    <>
       {/* ✅ Tombol Plan Mission di Bawah */}
       <button
-        className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-white text-black font-bold px-6 py-3 rounded-full border-2 border-black shadow-md cursor-pointer hover:bg-gray-200 transition duration-300"
+        className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-white text-black font-bold px-6 py-3 rounded-full border-2 border-black shadow-md cursor-pointer hover:bg-gray-200 transition duration-300 z-50"
         onClick={() => setShowPopup(!showPopup)}
       >
         Plan Mission
@@ -58,7 +65,7 @@ const Button = ({ onSaveMission }) => {
 
       {/* Popup untuk input nama misi */}
       {showPopup && (
-        <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-white p-4 border rounded shadow-lg flex flex-col gap-2">
+        <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-white p-4 border rounded shadow-lg flex flex-col gap-2 z-50">
           <input
             type="text"
             placeholder="Nama Misi"
@@ -75,18 +82,19 @@ const Button = ({ onSaveMission }) => {
         </div>
       )}
 
-      {/* ✅ Tombol Pesawat (Top-Left) */}
+      {/* ✅ Container Tombol Pesawat (Selalu Overlay) */}
       <div className="absolute top-30 left-4 z-[1000]">
+        {/* ✅ Tombol Pesawat */}
         <button
           onClick={() => setShowMissions(!showMissions)}
-          className="bg-white p-3 rounded-full shadow-lg flex items-center justify-center"
+          className="bg-white p-3 rounded-full shadow-lg flex items-center justify-center z-[1000] relative"
         >
           <FaPlane className="text-blue-500 text-3xl" />
         </button>
 
-        {/* Popup Daftar Misi */}
+        {/* ✅ Popup Daftar Misi */}
         {showMissions && (
-          <div className="absolute top-14 left-0 w-64 bg-white p-4 rounded-xl shadow-lg">
+          <div className="absolute top-4 left-4 w-64 bg-white p-4 rounded-xl shadow-lg z-[900]">
             <h3 className="text-xl font-bold text-center">Saved Mission</h3>
 
             {missions.length === 0 ? (
@@ -96,9 +104,11 @@ const Button = ({ onSaveMission }) => {
                 {missions.map((mission) => (
                   <li
                     key={mission.id}
-                    className="flex items-center justify-between bg-gray-200 p-2 rounded-lg"
+                    className="flex items-center justify-between bg-gray-200 p-2 rounded-lg hover:bg-gray-300 cursor-pointer"
                   >
-                    <span className="font-semibold">{mission.name}</span>
+                    <span className="font-semibold" onClick={() => handleLoadMission(mission)}>
+                      {mission.name}
+                    </span>
                     <div className="flex gap-2">
                       <button className="text-gray-600 hover:text-blue-500">
                         <FaEdit />
@@ -114,7 +124,7 @@ const Button = ({ onSaveMission }) => {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 
