@@ -10,7 +10,7 @@ const DefaultMap = () => {
   const [waypoints, setWaypoints] = useState([]); // Simpan koordinat
 
   useEffect(() => {
-    const centerUgm = [-7.770204, 110.377873]; // ✅ Pindahkan deklarasi ke luar if
+    const centerUgm = [-7.770204, 110.377873];
   
     if (mapRef.current && !mapRef.current._leaflet_id) {
       const map = L.map(mapRef.current, { zoomControl: false }).setView(centerUgm, 18);
@@ -56,10 +56,10 @@ const DefaultMap = () => {
         setWaypoints(coordinates); // Simpan koordinat ke state
       });
   
-      // ✅ Tambahkan Logo UGM di tengah (pindahkan ke dalam if agar `map` tersedia)
+      
       const ugmIcon = L.icon({
-        iconUrl: "/images/logo-ugm.png", // Path gambar UGM (Pastikan ada di public/)
-        iconSize: [50, 50], // Ukuran ikon (sesuai kebutuhan)
+        iconUrl: "/images/logo-ugm.png", 
+        iconSize: [50, 50], 
         iconAnchor: [25, 25], // Posisi anchor agar ikon di tengah titik koordinat
         popupAnchor: [0, -25], // Agar popup muncul di atas ikon
       });
@@ -70,7 +70,7 @@ const DefaultMap = () => {
   
       console.log("✅ Logo UGM ditambahkan di koordinat:", centerUgm);
     }
-  }, []); // ✅ Pastikan `useEffect` ditutup dengan benar  
+  }, []); 
 
   // ✅ Definisikan fungsi saveMission
   const saveMission = async (missionName) => {
@@ -114,7 +114,7 @@ const DefaultMap = () => {
       <div ref={mapRef} className="absolute top-[6.5vw] left-0 w-screen h-[calc(100vh-6.5vw)] z-10"></div>
 
       {/* ✅ Pastikan Button ada di sini */}
-      <Button onSaveMission={saveMission} />
+      <Button />
     </div>
   );
 };
