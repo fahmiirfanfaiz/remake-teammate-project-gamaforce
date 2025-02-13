@@ -5,3 +5,9 @@
   --font-inter: 'Inter', sans-serif;
   --font-poppins: 'Poppins', sans-serif;
 }
+
+.leaflet-control-zoom {
+  top: 245px !important; /* Sesuaikan jaraknya dari bawah */
+  right: 2px !important;  /* Sesuaikan jika perlu bergeser kanan */
+  position: absolute !important;
+}
