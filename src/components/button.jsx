@@ -4,7 +4,7 @@ import { FaPlane, FaTrash, FaEdit } from "react-icons/fa"; // Import ikon pesawa
 const Button = ({ onSaveMission, loadMission }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [missionName, setMissionName] = useState("");
-  const [showMissions, setShowMissions] = useState(false); // Tampilkan daftar misi
+  const [showMissions, setShowMissions] = useState(false);
   const [missions, setMissions] = useState([]); // Simpan daftar misi
 
   console.log("🛠 onSaveMission di Button:", onSaveMission); // Debugging
